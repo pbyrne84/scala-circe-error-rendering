@@ -3,7 +3,7 @@
 A recursive rendering of the errors from circe, this allows more informative complete errors from things like akka http
 that have **ErrorAccumulatingCirceSupport** from **akka-http-json**.
 
-Full examples for this are shown in **AkkaHttpCirceErrorRenderingSpec** with the rejection handler returning
+Full examples for this are shown in [AkkaHttpCirceErrorRenderingSpec](https://github.com/pbyrne84/scala-circe-error-rendering/blob/main/src/test/scala/com/github/pbyrne84/circe/rendering/AkkaHttpCirceErrorRenderingSpec.scala) with the rejection handler returning
 
 ```json
 {
@@ -40,9 +40,11 @@ with an expected payload of something like
 
 
 
-**CirceErrorRendering.renderErrors** simply takes the failed result of a decode attempt which is a **NonEmptyList[Error]**.
+**CirceErrorRendering.renderErrors** ([code](https://github.com/pbyrne84/scala-circe-error-rendering/blob/main/src/main/scala/com/github/pbyrne84/circe/rendering/CirceErrorRendering.scala)) simply takes the failed result of a decode attempt which is a **NonEmptyList[Error]**.
 
 Used in akka http rejection handler example it looks like this
+
+[AkkaHttpCirceErrorRenderingSpec.scala#L43](https://github.com/pbyrne84/scala-circe-error-rendering/blob/c300c414cde00b3ee5bc8778ef38df1fce095a90/src/test/scala/com/github/pbyrne84/circe/rendering/AkkaHttpCirceErrorRenderingSpec.scala#L43)
 
 ```scala
   .handle {
