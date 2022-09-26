@@ -49,14 +49,21 @@ scalacOptions := List(
   "-P:splain:color:false"
 )
 
-val circeVersion = "0.14.1"
+val circeVersion = "0.14.3"
+val akkaVersion = "2.6.8"
+val akkaHttpVersion = "10.2.10"
+
 libraryDependencies ++= Vector(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "org.scalatest" %% "scalatest" % "3.2.9" % Test
+  "org.scalatest" %% "scalatest" % "3.2.9" % Test,
+  "com.typesafe.akka" %% "akka-http" % akkaHttpVersion % Test,
+  "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
+  "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
+  "de.heikoseeberger" %% "akka-http-circe" % "1.39.2" % Test
 )
 
-Test / test := (test in Test)
+Test / test := (Test / test)
   .dependsOn(Compile / scalafmtCheck)
   .dependsOn(Test / scalafmtCheck)
   .value

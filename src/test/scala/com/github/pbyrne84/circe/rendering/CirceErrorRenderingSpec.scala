@@ -1,4 +1,4 @@
-package com.github.pbyrne84.circe.rendoring
+package com.github.pbyrne84.circe.rendering
 
 import cats.data.{NonEmptyList, Validated}
 import io.circe
@@ -15,6 +15,8 @@ class CirceErrorRenderingSpec extends AnyWordSpec with Matchers {
     }
   }
 
+  private val missingFieldErrorText = "Missing required field"
+
   "CirceErrorRendering" should {
     import io.circe.generic.semiauto._
 
@@ -26,9 +28,9 @@ class CirceErrorRenderingSpec extends AnyWordSpec with Matchers {
       val failures = accumulateFailures("""{}""")
 
       CirceErrorRendering.renderErrors(failures) shouldBe parseJson(
-        """
+        s"""
         |{
-        |  "field1" : "the field is missing"
+        |  "field1" : "$missingFieldErrorText"
         |}
         """.stripMargin
       )
@@ -48,10 +50,10 @@ class CirceErrorRenderingSpec extends AnyWordSpec with Matchers {
 
       val failures = accumulateFailures("""{}""")
       CirceErrorRendering.renderErrors(failures) shouldBe parseJson(
-        """
+        s"""
         |{
-        |  "field1" : "the field is missing",
-        |  "field2" : "the field is missing"
+        |  "field1" : "$missingFieldErrorText",
+        |  "field2" : "$missingFieldErrorText"
         |}
         """.stripMargin
       )
@@ -67,10 +69,10 @@ class CirceErrorRenderingSpec extends AnyWordSpec with Matchers {
       val failures = accumulateFailures[X]("""{ "field1":{} }""")
 
       CirceErrorRendering.renderErrors(failures) shouldBe parseJson(
-        """
+        s"""
         |{
         |  "field1" : {
-        |    "field1" : "the field is missing"
+        |    "field1" : "$missingFieldErrorText"
         |  }
         |}
         """.stripMargin
@@ -106,21 +108,21 @@ class CirceErrorRenderingSpec extends AnyWordSpec with Matchers {
       )
 
       CirceErrorRendering.renderErrors(failures) shouldBe parseJson(
-        """
+        s"""
           |{
           |  "xField1" : {
           |    "aField3" : {
-          |      "bField1" : "the field is missing"
+          |      "bField1" : "$missingFieldErrorText"
           |    },
           |    "aField2" : {
-          |      "cField2" : "the field is missing",
-          |      "cField1" : "the field is missing"
+          |      "cField2" : "$missingFieldErrorText",
+          |      "cField1" : "$missingFieldErrorText"
           |    },
-          |    "aField1" : "the field is missing"
+          |    "aField1" : "$missingFieldErrorText"
           |  },
-          |  "xField2" : "the field is missing",
-          |  "xField3" : "the field is not the correct type, expected 'Boolean'",
-          |  "xField4" : "the field is not the correct type, expected 'Array'",
+          |  "xField2" : "$missingFieldErrorText",
+          |  "xField3" : "Got value '\\"\\"' with wrong type, expecting 'true' or 'false'",
+          |  "xField4" : "Got value 'true' with wrong type, expecting array",
           |  "xField5" : "custom error message"
           |}
         """.stripMargin

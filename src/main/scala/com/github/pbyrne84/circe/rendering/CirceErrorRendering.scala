@@ -1,4 +1,4 @@
-package com.github.pbyrne84.circe.rendoring
+package com.github.pbyrne84.circe.rendering
 
 import cats.data.NonEmptyList
 import io.circe.CursorOp.DownField
@@ -38,12 +38,15 @@ object CirceErrorRendering {
   }
 
   private def remapError(circeError: String) = {
-    if (circeError == "Attempt to decode value on failed cursor") {
+    // upgrading to 14.3 introduced a more human 'Missing required field' error
+    // with 14.3 we can just dump the message out and remove all this logic
+    val oldCirceMissingFieldError = "Attempt to decode value on failed cursor"
+    if (circeError == oldCirceMissingFieldError) {
       "the field is missing"
     } else if (circeError.contains(" ")) {
       circeError
     } else {
-      //C[A] comes from type erasure
+      //C[A] comes from type erasure, again with 14.3 this is not needed as the error messages have been cleaned up
       s"""the field is not the correct type, expected '${circeError.replaceAll("C\\[A]", "Array")}'"""
     }
   }.trim
